@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -45,4 +47,22 @@ func deal(d deck, handSize int) (deck, deck) {
 func (d deck) toString() string {
 	// 將 d (deck type) 轉回 []string type，並用 ","連接slices內的字串
 	return strings.Join([]string(d), ",")
+}
+
+func (d deck) saveToFile(filename string) error {
+	return ioutil.WriteFile(filename, []byte(d.toString()), 0666)
+}
+
+func newDeckFromFile(filename string) deck {
+	bs, err := ioutil.ReadFile(filename)
+	if err != nil {
+		// log the error and return a call to newDeck()
+		fmt.Println("Error:", err)
+		os.Exit(1)
+	}
+
+	// convert []bytes to string type, and then split it by using ",". Finally, it turns to be a slice such as ["Ace of Spades", "Two of Spades", ...]
+	s := strings.Split(string(bs), ",")
+	// convert slice to deck type
+	return deck(s)
 }
