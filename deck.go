@@ -49,10 +49,12 @@ func (d deck) toString() string {
 	return strings.Join([]string(d), ",")
 }
 
+// Save a list of cards to a file on the local machine
 func (d deck) saveToFile(filename string) error {
 	return ioutil.WriteFile(filename, []byte(d.toString()), 0666)
 }
 
+// Load a list of cards from the local machine
 func newDeckFromFile(filename string) deck {
 	bs, err := ioutil.ReadFile(filename)
 	if err != nil {
